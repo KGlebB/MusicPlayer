@@ -1,0 +1,32 @@
+<!-- dialog_select_playlist.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select or Create Playlist"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextNewPlaylist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Playlist Name"
+        android:layout_margin="16dp"
+        android:padding="8dp"/>
+
+    <ListView
+        android:id="@+id/listViewPlaylists"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:padding="16dp"/>
+</LinearLayout>

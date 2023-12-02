@@ -1,9 +1,10 @@
 package com.example.musicplayer
-
+import android.app.AlertDialog
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -17,6 +18,7 @@ import java.util.Locale
 class MainActivity : ComponentActivity() {
     private lateinit var playerButton: Button
     private lateinit var playlistButton: Button
+    private lateinit var addToPlaylistButton: Button
     private lateinit var searchEditText: EditText
     private lateinit var musicListView: ListView
     private lateinit var musicAdapter: ArrayAdapter<String>
@@ -24,6 +26,9 @@ class MainActivity : ComponentActivity() {
     private lateinit var filteredMusicList: ArrayList<String>
 
     private var mediaPlayer: MediaPlayer? = null
+    private var selectedSong: String? = null;
+
+    private val playlists: MutableMap<String, ArrayList<String>> = mutableMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,7 @@ class MainActivity : ComponentActivity() {
     private fun initializeUIElements () {
         playerButton = findViewById(R.id.playerButton);
         playlistButton = findViewById(R.id.playlistButton);
+        addToPlaylistButton = findViewById(R.id.addToPlaylistButton);
         searchEditText = findViewById(R.id.searchEditText);
         musicListView = findViewById(R.id.musicListView);
     }
@@ -65,7 +71,10 @@ class MainActivity : ComponentActivity() {
             Toast.makeText(this@MainActivity, "Player button clicked", Toast.LENGTH_SHORT).show()
         }
         playlistButton.setOnClickListener {
-            Toast.makeText(this@MainActivity, "Playlist button clicked", Toast.LENGTH_SHORT).show()
+            viewPlaylists()
+        }
+        addToPlaylistButton.setOnClickListener {
+            addToPlaylist()
         }
     }
 
@@ -108,11 +117,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun playMusic(fileName: String) {
+        selectedSong = fileName
         if (mediaPlayer?.isPlaying == true) {
             mediaPlayer!!.stop()
             mediaPlayer!!.release()
         }
-        val resId = resources.getIdentifier(fileName, "raw", packageName)
+        val resId = resources.getIdentifier(selectedSong, "raw", packageName)
         mediaPlayer = MediaPlayer.create(this, resId)
         mediaPlayer?.start()
     }
@@ -120,5 +130,74 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer?.release()
+    }
+
+    private fun addToPlaylist() {
+        selectedSong?.let { showPlaylistSelectionDialog(it) }
+    }
+
+    private fun addToPlaylist(playlistName: String, song: String) {
+        var playlist: ArrayList<String>? = playlists[playlistName]
+        if (playlist == null) {
+            playlist = ArrayList()
+            playlists?.put(playlistName, playlist)
+        }
+        playlist.add(song)
+    }
+
+    private fun viewPlaylists() {
+        val playlistsText = StringBuilder("Playlists:\n")
+        for (playlistName in playlists.keys) {
+            playlistsText.append("- ").append(playlistName).append("\n")
+        }
+        Toast.makeText(this, playlistsText.toString(), Toast.LENGTH_LONG).show()
+    }
+
+    private fun showPlaylistSelectionDialog(selectedSong: String) {
+        val builder = AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val dialogView: View = inflater.inflate(R.layout.dialog_select_playlist, null)
+        builder.setView(dialogView)
+        val editTextNewPlaylist = dialogView.findViewById<EditText>(R.id.editTextNewPlaylist)
+        val listViewPlaylists = dialogView.findViewById<ListView>(R.id.listViewPlaylists)
+        val playlistNames: ArrayList<String?> = ArrayList(playlists.keys)
+        val playlistAdapter = PlaylistAdapter(this, playlistNames)
+        listViewPlaylists.adapter = playlistAdapter
+        val alertDialog = builder.create()
+        listViewPlaylists.onItemClickListener =
+            OnItemClickListener { parent, view, position, id ->
+                val playlistName: String? = playlistAdapter.getItem(position)
+                if (playlistName != null) {
+                    addToPlaylist(playlistName, selectedSong)
+                }
+                Toast.makeText(
+                    this@MainActivity,
+                    "Added '$selectedSong' to $playlistName",
+                    Toast.LENGTH_SHORT
+                ).show()
+                alertDialog.dismiss()
+            }
+        builder.setPositiveButton(
+            "Create Playlist"
+        ) { _, _ ->
+            val newPlaylistName = editTextNewPlaylist.text.toString().trim { it <= ' ' }
+            if (!newPlaylistName.isEmpty()) {
+                addToPlaylist(newPlaylistName, selectedSong)
+                Toast.makeText(
+                    this@MainActivity,
+                    "Created playlist '$newPlaylistName' and added '$selectedSong'",
+                    Toast.LENGTH_SHORT
+                ).show()
+                alertDialog.dismiss()
+            } else {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Please enter a playlist name",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        }
+        alertDialog.show()
     }
 }
