@@ -162,10 +162,29 @@ class MainActivity : ComponentActivity() {
         val listViewPlaylists = dialogView.findViewById<ListView>(R.id.listViewPlaylists)
         val playlistNames: ArrayList<String?> = ArrayList(playlists.keys)
         val playlistAdapter = PlaylistAdapter(this, playlistNames)
-        listViewPlaylists.adapter = playlistAdapter
+        builder.setPositiveButton(
+            "Create Playlist"
+        ) { _, _ ->
+            val newPlaylistName = editTextNewPlaylist.text.toString().trim { it <= ' ' }
+            if (newPlaylistName.isNotEmpty()) {
+                addToPlaylist(newPlaylistName, selectedSong)
+                Toast.makeText(
+                    this@MainActivity,
+                    "Created playlist '$newPlaylistName' and added '$selectedSong'",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Please enter a playlist name",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
         val alertDialog = builder.create()
+        listViewPlaylists.adapter = playlistAdapter
         listViewPlaylists.onItemClickListener =
-            OnItemClickListener { parent, view, position, id ->
+            OnItemClickListener { _, _, position, _ ->
                 val playlistName: String? = playlistAdapter.getItem(position)
                 if (playlistName != null) {
                     addToPlaylist(playlistName, selectedSong)
@@ -177,27 +196,6 @@ class MainActivity : ComponentActivity() {
                 ).show()
                 alertDialog.dismiss()
             }
-        builder.setPositiveButton(
-            "Create Playlist"
-        ) { _, _ ->
-            val newPlaylistName = editTextNewPlaylist.text.toString().trim { it <= ' ' }
-            if (!newPlaylistName.isEmpty()) {
-                addToPlaylist(newPlaylistName, selectedSong)
-                Toast.makeText(
-                    this@MainActivity,
-                    "Created playlist '$newPlaylistName' and added '$selectedSong'",
-                    Toast.LENGTH_SHORT
-                ).show()
-                alertDialog.dismiss()
-            } else {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Please enter a playlist name",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            }
-        }
         alertDialog.show()
     }
 }
