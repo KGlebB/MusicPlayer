@@ -8,7 +8,7 @@
         android:id="@+id/textViewDialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select or Create Playlist"
+        android:text="Выберите или создайте плейлист"
         android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -18,7 +18,7 @@
         android:id="@+id/editTextNewPlaylist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Playlist Name"
+        android:hint="Введите имя плейлиста"
         android:layout_margin="16dp"
         android:padding="8dp"/>
 

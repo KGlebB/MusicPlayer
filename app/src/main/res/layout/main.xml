@@ -1,51 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <Button
-        android:id="@+id/playerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Player"
-        android:layout_margin="16dp"/>
+    tools:context=".MainActivity"
+    android:background="#EEEEEE">
 
     <Button
         android:id="@+id/addToPlaylistButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add to playlist"
-        android:layout_margin="16dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Добавить в плейлист"
+        android:textColor="#FFFFFF"
+        android:background="#4CAF50"
+        android:padding="8dp"
+        />
 
     <Button
         android:id="@+id/playlistButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Playlist"
-        android:layout_below="@id/playerButton"
+        android:text="Плейлисты"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"/>
+        android:layout_toEndOf="@id/addToPlaylistButton"
+        android:layout_marginStart="16dp"
+        android:textColor="#FFFFFF"
+        android:background="#2196F3"
+        android:padding="8dp" />
+
+    <Button
+        android:id="@+id/clearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Очистить"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_below="@id/playlistButton"
+        android:textColor="#FFFFFF"
+        android:background="#F22E3E"
+        android:padding="8dp" />
 
     <EditText
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/playerButton"
+        android:layout_below="@id/addToPlaylistButton"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_toEndOf="@id/playlistButton"
-        android:hint="Search" />
+        android:layout_toEndOf="@id/clearButton"
+        android:hint="Поиск по трекам" />
+
+    <ImageButton
+        android:id="@+id/pauseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_media_pause"
+        android:layout_below="@id/clearButton"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="#FFFFFF"
+        android:background="#EFCC4F"
+        android:padding="8dp" />
+
+    <TextView
+        android:id="@+id/currentTrackTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/clearButton"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_toEndOf="@id/pauseButton"
+        android:text="" />
 
     <ListView
         android:id="@+id/musicListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/searchEditText"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="70dp"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="1dp"
+        android:background="#FFFFFF"/>
 
 </RelativeLayout>
