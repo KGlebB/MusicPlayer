@@ -167,7 +167,7 @@ class MainActivity : ComponentActivity() {
     private fun filterMusicList(query: String) {
         filteredMusicList.clear()
         for (music in musicList) {
-            if (music!!.path.lowercase(Locale.getDefault()).contains(query.lowercase(Locale.getDefault()))
+            if (music!!.name.lowercase(Locale.getDefault()).contains(query.lowercase(Locale.getDefault()))
             ) {
                 filteredMusicList.add(music)
             }
